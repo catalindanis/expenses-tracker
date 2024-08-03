@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useFonts } from "expo-font";
 import React from "react";
 
@@ -19,26 +19,12 @@ export default function Browse() {
         backgroundColor: "white",
       }}
     >
+      
        
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: "Montserrat",
-    fontSize: 20,
-  },
-  header: {},
-  tabBar: {
-    height: 80,
-    borderRadius: 0,
-    borderWidth: 0,
-    borderTopWidth: 1,
-    borderTopColor: "lightgray",
-    paddingTop: 10,
-  },
-  tabBarIcon: {},
-  tabBarItem: {},
-  tabBarItemFocused: {},
+  
 });

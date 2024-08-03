@@ -1,8 +1,8 @@
 import { useFonts } from "expo-font";
 import { Stack, Tabs } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Keyboard } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function RootLayout() {
   let [fontsLoaded] = useFonts({
@@ -14,21 +14,36 @@ export default function RootLayout() {
 
   const [indexFocused, setIndexFocused] = useState(true);
 
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  // Keyboard.addListener("keyboardDidShow", () => {
+  //   //setKeyboardStatus(true);
+  // })
+
+  // Keyboard.addListener("keyboardDidHide", () => {
+  //   //setKeyboardStatus(false);
+  // })
+
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: !keyboardStatus ? styles.tabBar : styles.hideTabBar,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "",
-          tabBarIcon: () => (
-            indexFocused ? 
-            <MaterialIcons name="add-shopping-cart" size={39} color="black" /> : 
-            <MaterialIcons name="add-shopping-cart" size={32} color="darkgray" />
-          ),
+          tabBarIcon: () =>
+            indexFocused ? (
+              <MaterialIcons name="add-shopping-cart" size={39} color="black" />
+            ) : (
+              <MaterialIcons
+                name="add-shopping-cart"
+                size={32}
+                color="darkgray"
+              />
+            ),
           tabBarItemStyle: indexFocused
             ? styles.tabBarItem
             : styles.tabBarItemFocused,
@@ -46,11 +61,12 @@ export default function RootLayout() {
         name="browse"
         options={{
           title: "",
-          tabBarIcon: () => (
-            !indexFocused ?
-            <MaterialIcons name="history" size={42} color="black" /> : 
-            <MaterialIcons name="history" size={34} color="gray" />
-          ),
+          tabBarIcon: () =>
+            !indexFocused ? (
+              <MaterialIcons name="history" size={43} color="black" />
+            ) : (
+              <MaterialIcons name="history" size={34} color="gray" />
+            ),
           tabBarIconStyle: !indexFocused
             ? styles.tabBarItem
             : styles.tabBarItemFocused,
@@ -76,8 +92,9 @@ const styles = StyleSheet.create({
   },
   header: {},
   tabBar: {
+    position: "static",
     height: 80,
-    paddingTop: 15,
+    paddingTop: 12,
     borderRadius: 15,
     borderWidth: 1,
     borderTopWidth: 1,
@@ -89,4 +106,7 @@ const styles = StyleSheet.create({
   tabBarIcon: {},
   tabBarItem: {},
   tabBarItemFocused: {},
+  hideTabBar: {
+    display: "none",
+  },
 });
