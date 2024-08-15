@@ -1,19 +1,23 @@
 import {
+  KeyboardAvoidingView,
+  Modal,
   Pressable,
   StyleSheet,
   Switch,
   Text,
   TextInput,
   View,
+  Keyboard,
 } from "react-native";
 import { useFonts } from "expo-font";
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { db } from "./firebase/firebaseConfig";
 import { ref, set } from "firebase/database";
 import { Double, Float } from "react-native/Libraries/Types/CodegenTypes";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function Index() {
   let [fontsLoaded] = useFonts({
@@ -45,6 +49,10 @@ export default function Index() {
   const [incasat, setIncasat] = useState(false);
   const toggleSwitch = () => setIncasat((previousState) => !previousState);
 
+  const [showModal, setShowModal] = useState(false);
+
+  const inputRef = useRef();
+
   return (
     <View
       style={{
@@ -54,12 +62,158 @@ export default function Index() {
         backgroundColor: "white",
       }}
     >
+      <Modal
+        transparent={true}
+        visible={showModal}
+        animationType={"fade"}
+        statusBarTranslucent={true}
+        onShow={() => {
+          setTimeout(() => {
+            inputRef?.current?.focus()
+          }, 50)
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        >
+          <View
+            style={{
+              borderColor: "gray",
+              borderWidth: 1,
+              borderRadius: 5,
+              height: 180,
+              width: 320,
+              backgroundColor: "white",
+            }}
+          >
+            <Text
+              style={{
+                position: "absolute",
+                top: 5,
+                left: 5,
+                fontFamily: "MontserratSemiBold",
+                fontSize: 20,
+              }}
+            >
+              Numele portofelului
+            </Text>
+            <Pressable
+              onPress={() => {
+                setShowModal(false);
+              }}
+            >
+              <AntDesign
+                name="close"
+                size={24}
+                color="black"
+                style={{ position: "absolute", top: 3, right: 5 }}
+              />
+            </Pressable>
+            <TextInput
+              style={{
+                position: "absolute",
+                top: 40,
+                left: 14,
+                width: 290,
+                height: 50,
+                fontSize: 20,
+                fontFamily: "Montserrat",
+                borderWidth: 1,
+                borderRadius: 5,
+              }}
+              ref={inputRef}
+              autoFocus={false}
+            ></TextInput>
+            <View
+              style={{
+                position: "absolute",
+                bottom: 25,
+                width: 200,
+                height: 50,
+                backgroundColor: "gray",
+                borderRadius: 5,
+                left: 57,
+              }}
+            >
+              <Pressable
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontFamily: "MontserratBold", fontSize: 16 }}>
+                  Creare
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
-          marginTop: 60,
+          position: "absolute",
+          top: 10,
+          right: 10,
           justifyContent: "center",
-          alignItems: "center",
+          width: 140,
+          height: 40,
         }}
+      >
+        <Pressable
+          style={{
+            justifyContent: "center",
+            borderWidth: 1,
+            width: 140,
+            height: 40,
+            borderRadius: 5,
+          }}
+          onPress={() => {
+            setShowModal(true);
+          }}
+        >
+          <Text
+            style={{
+              position: "absolute",
+              right: 40,
+              fontFamily: "MontserratSemiBold",
+            }}
+          >
+            Portofel nou
+          </Text>
+          <MaterialCommunityIcons
+            style={{ position: "absolute", right: 0 }}
+            name="wallet-plus-outline"
+            size={34}
+            color="black"
+          />
+        </Pressable>
+      </View>
+
+      <View
+        style={
+          !showModal
+            ? {
+                marginTop: 60,
+                justifyContent: "center",
+                alignItems: "center",
+              }
+            : {
+                marginTop: 60,
+                justifyContent: "center",
+                alignItems: "center",
+                opacity: 0.3,
+              }
+        }
       >
         <View>
           <View style={styles.valueField}>
@@ -130,6 +284,12 @@ export default function Index() {
           }
         >
           <Pressable
+            style={{
+              width: 220,
+              height: 70,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onPress={() => {
               addExpense(parseFloat(valoare), descriere, portofel, incasat);
             }}
