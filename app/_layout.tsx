@@ -1,10 +1,11 @@
 import { useFonts } from "expo-font";
-import { Stack, Tabs } from "expo-router";
+import { router, Stack, Tabs } from "expo-router";
 import { StyleSheet, Keyboard } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
 
 export default function RootLayout() {
+
   let [fontsLoaded] = useFonts({
     MontserratLight: require("../assets/fonts/Montserrat-Light.ttf"),
     Montserrat: require("../assets/fonts/Montserrat-Regular.ttf"),
@@ -31,7 +32,7 @@ export default function RootLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: "",
           tabBarIcon: () =>
@@ -81,6 +82,32 @@ export default function RootLayout() {
           },
         }}
       />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "",
+          tabBarIcon: () =>
+            indexFocused ? (
+              <MaterialIcons name="add-shopping-cart" size={39} color="black" />
+            ) : (
+              <MaterialIcons
+                name="add-shopping-cart"
+                size={32}
+                color="darkgray"
+              />
+            ),
+          tabBarItemStyle: { display: "none" },
+          headerTitle: "Adaugă o nouă cheltuială",
+          headerTitleAlign: "center",
+          headerTitleStyle: styles.title,
+        }}
+        listeners={{
+          tabPress: () => {
+            setIndexFocused(true);
+          },
+        }}
+      />
+      
     </Tabs>
   );
 }
